@@ -9,7 +9,6 @@ This project demonstrates an **Apache Kafka** implementation using **Spring Boot
 - [Prerequisite](#prerequisite)
 - [Configuration](#configuration)
 - [How to run](#how-to-run)
-- [Endpoint API](#endpoint-api)
 - [Project Structure](#project-structure)
 - [Flow Event](#event-flow)
 - [Kafka Monitoring](#kafka-monitoring)
