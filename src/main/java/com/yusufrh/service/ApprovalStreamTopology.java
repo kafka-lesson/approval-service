@@ -19,40 +19,13 @@ public class ApprovalStreamTopology {
         private final JsonSerde<UserRegisteredEvent> userSerde;
         private final JsonSerde<ApprovalResultEvent> approvalSerde;
         private final TopicProperties topicProperties;
+        private final ApprovalService approvalService;
 
         @Bean
         public KStream<String, UserRegisteredEvent> approvalTopology(StreamsBuilder builder) {
                 KStream<String, UserRegisteredEvent> stream = builder.stream(topicProperties.getTopics().getRegistrationTopic(), Consumed.with(Serdes.String(), userSerde));
-                KStream<String, ApprovalResultEvent> approved = stream.mapValues(this::approve);
+                KStream<String, ApprovalResultEvent> approved = stream.mapValues(approvalService::approve);
                 approved.to(topicProperties.getTopics().getApprovalTopic(), Produced.with(Serdes.String(), approvalSerde));
                 return stream;
-        }
-
-        private ApprovalResultEvent approve(UserRegisteredEvent event) {
-
-                log.info("Processing user {}", event.getUserId());
-
-                if (event.getAge() >= 17) {
-                        return ApprovalResultEvent.builder()
-                                .userId(event.getUserId())
-                                .username(event.getUsername())
-                                .email(event.getEmail())
-                                .age(event.getAge())
-                                .status("APPROVED")
-                                .reason("Adult")
-                                .build();
-                
-                }
-
-                return ApprovalResultEvent.builder()
-                                .userId(event.getUserId())
-                                .username(event.getUsername())
-                                .email(event.getEmail())
-                                .age(event.getAge())
-                                .status("REJECTED")
-                                .reason("Underage")
-                                .build();
-
-
         }
 }
