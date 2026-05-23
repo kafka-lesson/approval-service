@@ -1,4 +1,4 @@
-package com.yusufrh.entity;
+package com.yusufrh.event;
 
 import java.util.UUID;
 
@@ -15,5 +15,6 @@ public class UserRegisteredEvent {
     UUID userId;
     int age;
     String email;
-    String username; 
+    String username;
 }
+
